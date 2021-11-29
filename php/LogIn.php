@@ -16,61 +16,40 @@ if (isset($_POST['botonLogin'])) {
   } else {
     //Si no ha habido ningún error, se INTENTA logear al usuario
     //Conectamos con la base de datos mysql
-    include 'DbConfig.php';
-    $conn = mysqli_connect($server, $user, $pass, $basededatos);
-    $conn->set_charset("utf8");
+    require_once 'DbConfig.php';
 
-    if (!$conn) {
-      die("Connection failed: " . mysqli_connect_error());
+    try {
+      $dsn = "mysql:host=$server;dbname=$basededatos";
+      $dbh = new PDO($dsn, $user, $pass);
+    } catch (PDOException $e) {
+      echo $e->getMessage();
     }
 
-    //die(password_hash("admin000", PASSWORD_DEFAULT) . "    " . password_hash("admin000", PASSWORD_DEFAULT));
-    $sql = "SELECT * from users where correo = '$correo'"; //. "' and pass = '" . password_hash($userpass, PASSWORD_DEFAULT) . "'";
-    $logear = mysqli_query($conn, $sql) or die(mysqli_error($conn));
-    $row = mysqli_fetch_array($logear, MYSQLI_ASSOC); //Lo convertimos a array
+    $stmt = $dbh->prepare("SELECT * FROM users WHERE correo = ?");
+
+    $stmt->bindParam(1, $correo);
+
+    $stmt->execute();
+    $row = $stmt->fetch();
+
 
 
     if ($row == 0) {
       $error = 3;
-      die("No se ha encontrado a dicho usuario");
+      die("Estado 2");
     } else {
+      if (password_verify($userpass, $row['pass'])) {
 
-      $hash = $row['pass'];
-      // error_log($userpass . " " . $hash . "\n", 3, "/tmp/error.log");
-      // die($userpass . " " . $hash);
-      //  $now = time();
-
-      if (password_verify($userpass, $hash)) {
-        // die(time() - $now);
-
-        // error_log((time() - $now) . "\n", 3, "/tmp/error.log");
-        /*  $sql2 = "SELECT * from users where correo = '$correo'";
-        $logear = mysqli_query($conn, $sql2) or die(mysqli_error($conn));
-        $row = mysqli_fetch_array($logear, MYSQLI_ASSOC); //Lo convertimos a array*/
-
-        //Comprueba si el usuario existe
-        /* if (is_null($row)) {
-          $error = 3;
-        } else {*/
-        //Comprueba si el usuario esta baneado
         if ($row['estado'] == 'baneado') {
           $error = 4;
         } else {
-          if (($row['correo'] == $correo)) {
-            $_SESSION['correo'] = $correo;
-            $_SESSION['rol'] = $row['tipouser'];
-            $error = 0;
-          } else {
-            $error = 3;
-          }
+          $_SESSION['correo'] = $correo;
+          $_SESSION['rol'] = $row['tipouser'];
+          $error = 0;
         }
-
-        //die("Estado 5" . $error);
+      } else {
+        $error = 5;
       }
-      //die("estado 4");
-      /*  } else {
-        $error = 3;
-      }*/
     }
   }
 }
@@ -123,7 +102,7 @@ if (isset($_POST['botonLogin'])) {
         echo "<br>";
         echo "<a href='LogIn.php'>";
       } else if ($error == 3) {
-        echo "<h3>Datos de login incorrectos. :(</h3>";
+        echo "<h3>No se ha encontrado a dicho usuario</h3>";
         echo "<br>";
       } else if ($error == 0) {
         echo '<script type="text/javascript"> alert("Bienvenido al Sistema: ' . $correo . ' ");
@@ -131,6 +110,8 @@ if (isset($_POST['botonLogin'])) {
                         </script>';
       } else if ($error == 4) {
         echo '<h3>Lo siento, estas <strong style="color: red;">BANEADO!!</strong></h3>';
+      } else if ($error == 5) {
+        echo '<h3>Contraseña <strong style="color: red;">INCORRECTA!!</strong></h3>';
       }
 
 
