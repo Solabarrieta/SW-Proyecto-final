@@ -1,0 +1,39 @@
+{"usuarios":
+	[
+      {
+        "email": "pepe001@ikasle.ehu.es",
+        "nombre": "Pepe",
+        "apellido1": "Pruebas",
+        "apellido2": "Precisas",
+        "telefono": "625123123"
+      },
+	  {
+        "email": "jperez001@ikasle.ehu.es",
+        "nombre": "Juan",
+        "apellido1": "Perez",
+        "apellido2": "Ledesma",
+        "telefono": "634232323"
+      },
+      {
+        "email": "lalkorta001@ikasle.ehu.es",
+        "nombre": "Luis",
+        "apellido1": "Alkorta",
+        "apellido2": "Bereciartua",
+        "telefono": "634232324"
+      },
+      {
+        "email": "jsantos001@ikasle.ehu.es",
+        "nombre": "José",
+        "apellido1": "Santos",
+        "apellido2": "Lopez de Aguilera",
+        "telefono": "634232325"
+      },
+      {
+        "email": "xalonso001@ikasle.ehu.es",
+        "nombre": "Xabier",
+        "apellido1": "Alonso",
+        "apellido2": "Mouriño",
+        "telefono": "696756463"
+      }
+	]
+}

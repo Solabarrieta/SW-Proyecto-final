@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta content="text/html;" http-equiv="content-type" charset="utf-8">
+</head>
+<body>
+  <section class="main" id="s1">
+    <div>
+        <table style="border:4px solid #c1e9f6;" bgcolor="#9cc4e8">
+            <caption style="text-align:left">
+            <h2>Introducir un correo válido de alumno. Se visualizarán sus datos.</h2> 
+            </caption>
+            <tr>
+            <td align="right">Correo: </td>
+            <td align="left"><input type="text" id="correo" name="correo" autofocus></td>
+            </tr>
+            <tr>
+            <td align="right">Teléfono: </td>
+            <td align="left"><input style="width: 600px;" type="text" id="telefono" name="telefono" readonly></td>
+            </tr>
+            <tr>
+            <td align="right">Nombre: </td>
+            <td align="left"><input style="width: 600px;" type="text" id="nombre" name="nombre" readonly></td>
+            </tr>
+            <tr>
+            <td align="right">Apellidos: </td>
+            <td align="left"><input style="width: 600px;" type="text" id="apellidos" name="apelldios" readonly></td>
+            </tr>
+            <td></td>
+            <td align="left"><button id="botonCompl" name="botonCompl">Autocompletar</button></td>
+            </tr>
+        </table>
+    </div>
+  </section>
+  <script type="text/javascript" src="../js/jquery-3.4.1.min.js"></script>
+  <script type="text/javascript" src="../js/GetUserInfoJson.js"></script>
+</body>
+</html>
