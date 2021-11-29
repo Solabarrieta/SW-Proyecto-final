@@ -3,4 +3,5 @@ json/
 images/
 php/DbConfig.php
 .htaccess
+php/info.php
 
