@@ -159,11 +159,18 @@ if (isset($_POST['botonReg'])) {
         } else if ($error == 0) {
 
           require_once 'ClientVerifyEnrollment.php';
+          require_once 'DbConfigphp';
 
           if ($valido) {
-            //Si no ha habido ningún error, se registra al usuario
-            //Conectamos con la base de datos mysql
-            include 'DbConfig.php';
+            try {
+              $dsn = "mysql:host=$server;dbname=$basededatos";
+              $dbh = new PDO($dsn, $user, $pass);
+            } catch (PDOException $e) {
+              echo $e->getMessage();
+
+              //Si no ha habido ningún error, se registra al usuario
+              //Conectamos con la base de datos mysql
+              /* include 'DbConfig.php';
             $conn = mysqli_connect($server, $user, $pass, $basededatos);
             $conn->set_charset("utf8");
 
@@ -186,10 +193,27 @@ if (isset($_POST['botonReg'])) {
 
               //Si se puede introducir el usuario, entonces guardamos la imagen en el directorio images.
               move_uploaded_file($imagen_loc_tmp, $imagen_dir);
-              mysqli_close($conn);
-              echo '<script type="text/javascript"> alert("Se ha realizado el registro de forma correcta");
-                            window.location.href="LogIn.php";
-                            </script>';
+              mysqli_close($conn);*/
+
+              /*Prepare */
+              $stmt = $dbh->prepare("INSERT INTO users (tipouser, correo, nom, apell, pass, img) VALUES (?,?,?,?,?,?)");
+
+
+              /*BIND*/
+
+              if ($correo == 'admin@ehu.es' && $tipoUser = 'prof') {
+                $tipoUser = 'admin';
+              }
+
+              $hashpass = password_hash($userpass, PASSWORD_DEFAULT);
+
+              $stmt->bindParam(1, $tipoUser);
+              $stmt->bindParam(2, $correo);
+              $stmt->bindParam(3, $nom);
+              $stmt->bindParam(4, $apell);
+              $stmt->bindParam(5, $hashpass);
+              $stmt->bindParam(6, $imagen_dir);
+              $stmt->execute();
             }
           } else {
             echo 'El correo <span style="color: red;">' . $correo . '</span> NO esta matriculado en la asignatura Sistemas Web';
