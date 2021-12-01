@@ -36,7 +36,6 @@ if (isset($_POST['botonLogin'])) {
 
     if ($row == 0) {
       $error = 3;
-      die("Estado 2");
     } else {
       if (password_verify($userpass, $row['pass'])) {
 
@@ -45,6 +44,7 @@ if (isset($_POST['botonLogin'])) {
         } else {
           $_SESSION['correo'] = $correo;
           $_SESSION['rol'] = $row['tipouser'];
+          $_SESSION['imagen'] = $row['img'];
           $error = 0;
         }
       } else {
