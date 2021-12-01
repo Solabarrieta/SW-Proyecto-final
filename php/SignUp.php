@@ -19,6 +19,7 @@ if (isset($_POST['botonReg'])) {
   $pass = "";
   $repass = "";
 
+
   //Validación en servidor 
   $er = "/^([a-zA-Z]+[0-9]{3})@ikasle\.ehu\.(eus|es)$/";
   $er2 = "/^[a-zA-Z]+\.[a-zA-Z]+@ehu\.(eus|es)$/";
@@ -36,7 +37,6 @@ if (isset($_POST['botonReg'])) {
   $imagen_extension = strtolower(end($nombre_imagen_separado)); //Cogemos la extensión.
   $nuevo_nombre_imagen = md5(time() . $imagen_nombre) . '.' . $imagen_extension; //Se le da un nombre único a la imagen que se va a guardar en el servidor.
   $imagen_dir = "../images/" . $nuevo_nombre_imagen; //La base de datos guardará los directorios de las imagenes en el servidor.
-
   $error = 0;
 
 
@@ -159,43 +159,15 @@ if (isset($_POST['botonReg'])) {
         } else if ($error == 0) {
 
           require_once 'ClientVerifyEnrollment.php';
-          require_once 'DbConfigphp';
+          require_once 'DbConfig.php';
 
           if ($valido) {
+
             try {
               $dsn = "mysql:host=$server;dbname=$basededatos";
               $dbh = new PDO($dsn, $user, $pass);
-            } catch (PDOException $e) {
-              echo $e->getMessage();
-
-              //Si no ha habido ningún error, se registra al usuario
-              //Conectamos con la base de datos mysql
-              /* include 'DbConfig.php';
-            $conn = mysqli_connect($server, $user, $pass, $basededatos);
-            $conn->set_charset("utf8");
-
-            if (!$conn) {
-              die("Connection failed: " . mysqli_connect_error());
-            }
-
-            $hashpass = password_hash($userpass, PASSWORD_DEFAULT);
-
-            if ($correo == 'admin@ehu.es' && $tipoUser = 'prof') {
-              $tipoUser = 'admin';
-            }
-
-            $sql = "INSERT INTO users (tipouser, correo, nom, apell, pass, img) VALUES ('$tipoUser', '$correo', '$nom', '$apell', '$hashpass', '$imagen_dir')";
-            $anadir = mysqli_query($conn, $sql);
-            if (!$anadir) {
-              echo "<h3>Se ha producido un error al intentar registrar al usuario. :(</h3>";
-              echo "<br>";
-            } else {
-
-              //Si se puede introducir el usuario, entonces guardamos la imagen en el directorio images.
-              move_uploaded_file($imagen_loc_tmp, $imagen_dir);
-              mysqli_close($conn);*/
-
               /*Prepare */
+
               $stmt = $dbh->prepare("INSERT INTO users (tipouser, correo, nom, apell, pass, img) VALUES (?,?,?,?,?,?)");
 
 
@@ -214,10 +186,15 @@ if (isset($_POST['botonReg'])) {
               $stmt->bindParam(5, $hashpass);
               $stmt->bindParam(6, $imagen_dir);
               $stmt->execute();
+            } catch (PDOException $e) {
+              echo $e->getMessage();
             }
           } else {
             echo 'El correo <span style="color: red;">' . $correo . '</span> NO esta matriculado en la asignatura Sistemas Web';
           }
+          echo '<script type="text/javascript"> alert("Se ha realizado el registro de forma correcta");
+          window.location.href="LogIn.php";
+          </script>';
         } else {
           echo '<script>alert("Ha ocurrido un error inesperado, por favor, intentelo de nuevo ")
                   window.location.href="SignUp.php"
