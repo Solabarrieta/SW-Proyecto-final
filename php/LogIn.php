@@ -45,6 +45,7 @@ if (isset($_POST['botonLogin'])) {
         } else {
           $_SESSION['correo'] = $correo;
           $_SESSION['rol'] = $row['tipouser'];
+          $_SESSION['img'] = $row['img'];
           $error = 0;
         }
       } else {
