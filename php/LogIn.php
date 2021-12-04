@@ -36,7 +36,6 @@ if (isset($_POST['botonLogin'])) {
 
     if ($row == 0) {
       $error = 3;
-      die("Estado 2");
     } else {
       if (password_verify($userpass, $row['pass'])) {
 
@@ -45,7 +44,7 @@ if (isset($_POST['botonLogin'])) {
         } else {
           $_SESSION['correo'] = $correo;
           $_SESSION['rol'] = $row['tipouser'];
-          $_SESSION['img'] = $row['img'];
+          $_SESSION['imagen'] = $row['img'];
           $error = 0;
         }
       } else {
@@ -87,9 +86,14 @@ if (isset($_POST['botonLogin'])) {
             <td align="left"><input style="width: 600px;" type="password" id="userpass" name="userpass" autofocus></td>
           </tr>
           <tr>
+            <td></td>
+            <td align="left"><a href="RestablecerContraseña.php">¿Olvidaste la contraseña?</a></td>
+          </tr>
+          <tr>
             <td></td> <!-- NO VALIDA SIMPLEMENTE EJECUTA EL SCRIPT-->
             <td align="left"><input type="submit" id="botonLogin" name="botonLogin" value="Acceder"></button></td>
           </tr>
+
         </table>
       </form>
       <?php
