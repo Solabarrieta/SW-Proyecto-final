@@ -1,11 +1,5 @@
 <?php
 session_start();
-
-$_SESSION['User'] = $_POST['correo'];
-$_SESSION['UserRol'] = $_POST['user'];
-/*if ($_SESSION) {
-  header("Location: Layout.php");
-}*/
 ?>
 
 <?php
@@ -37,7 +31,7 @@ if (isset($_POST['botonReg'])) {
   $imagen_extension = strtolower(end($nombre_imagen_separado)); //Cogemos la extensión.
   $nuevo_nombre_imagen = md5(time() . $imagen_nombre) . '.' . $imagen_extension; //Se le da un nombre único a la imagen que se va a guardar en el servidor.
   $imagen_dir = "../images/" . $nuevo_nombre_imagen; //La base de datos guardará los directorios de las imagenes en el servidor.
-  $error = 0;
+  $error = -1;
 
 
   if (preg_match($er, $correo) && $tipoUser == 'prof') {
@@ -158,11 +152,12 @@ if (isset($_POST['botonReg'])) {
           echo '<h3>Las contraseñas que has introducido <strong style="color: red">NO COINCIDEN</strong></h3>';
         } else if ($error == 0) {
 
-          require_once 'ClientVerifyEnrollment.php';
+          //include 'ClientVerifyEnrollment.php';
+          $valido = true; //El soap ha dejado de funcionar porque la URL no existe...
+
           require_once 'DbConfig.php';
 
           if ($valido) {
-
             try {
               $dsn = "mysql:host=$server;dbname=$basededatos";
               $dbh = new PDO($dsn, $user, $pass);
@@ -196,6 +191,7 @@ if (isset($_POST['botonReg'])) {
           window.location.href="LogIn.php";
           </script>';
         } else {
+          die("Estado 2");
           echo '<script>alert("Ha ocurrido un error inesperado, por favor, intentelo de nuevo ")
                   window.location.href="SignUp.php"
         </script>';
