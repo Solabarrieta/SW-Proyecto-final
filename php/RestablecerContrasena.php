@@ -1,6 +1,5 @@
 <?php
 session_start();
-$_SESSION['correo-provisional'] = $_POST['correo'];
 
 $error = -1;
 //Validación del registro en el servidor
@@ -13,8 +12,9 @@ if (isset($_POST['botonLogin'])) {
     } else {
         //Si no ha habido ningún error, se INTENTA logear al usuario
         //Conectamos con la base de datos mysql
-        require_once 'DbConfig.php';
+        include 'DbConfig.php';
 
+        $_SESSION['correo-provisional'] = $_POST['correo'];
         try {
             $dsn = "mysql:host=$server;dbname=$basededatos";
             $dbh = new PDO($dsn, $user, $pass);
