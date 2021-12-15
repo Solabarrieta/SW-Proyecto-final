@@ -3,17 +3,15 @@ session_start();
 
 $error = -1;
 //Validación del registro en el servidor
-if (isset($_POST['botonLogin'])) {
+if (isset($_POST['restablecer'])) {
 
     $correo = $_POST['correo'];
-    die($correo);
     if ($correo == "") {
         $error = 1;
     } else {
         //Si no ha habido ningún error, se INTENTA logear al usuario
         //Conectamos con la base de datos mysql
         include 'DbConfig.php';
-
         $_SESSION['correo-provisional'] = $_POST['correo'];
         try {
             $dsn = "mysql:host=$server;dbname=$basededatos";
@@ -80,12 +78,12 @@ if (isset($_POST['botonLogin'])) {
                     $to = $_POST['correo'];
                     $subject = "Restablecimiento de contraseña Quiz SW";
                     $mailContent = 'Hola ' . $row['nom'] . ', 
-                <br/>Hemos recibido una petición para restablecer la contraseña de tu cuenta. 
-                <br/>Para restablecer la contraseña, clica el siguiente enlace : <a href="' . $link . '">' . $link . '</a>
-                <br/><br/>Saludos';
+                    <br/>Hemos recibido una petición para restablecer la contraseña de tu cuenta. 
+                    <br/>Para restablecer la contraseña, clica el siguiente enlace : <a href="' . $link . '">' . $link . '</a>
+                    <br/><br/>Saludos';
 
                     $enviado = mail($to, $subject, $mailContent);
-                    die($enviado);
+
                     if ($enviado) {
                         echo '<script type="text/javascript"> alert("Te hemos enviado un correo para que reestablezcas tu contraseña");
                     </script>';
