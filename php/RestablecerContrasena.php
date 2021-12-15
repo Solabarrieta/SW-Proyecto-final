@@ -72,17 +72,17 @@ if (isset($_POST['botonLogin'])) {
             <?php
             if (isset($_POST['restablecer'])) {
                 if ($error == 1) {
-                    echo 'Para que esto funcione debes introducir tu correo :(';
+                    echo 'Uupss parece que no has introducido el correo!';
                 } else if ($error == 2) {
-                    echo 'No hemos encontrado el correo introducido, por favor, vuelve a intentar';
+                    echo 'No hemos encontrado el correo introducido, por favor, vuelve a intentarlo';
                 } else {
                     $link = 'http://localhost/~oier/proyecto-final/php/NewPassword.php';
                     $to = $_POST['correo'];
-                    $subject = "Restablecimiento de contraseña";
+                    $subject = "Restablecimiento de contraseña Quiz SW";
                     $mailContent = 'Hola ' . $row['nom'] . ', 
                 <br/>Hemos recibido una petición para restablecer la contraseña de tu cuenta. 
                 <br/>Para restablecer la contraseña, clica el siguiente enlace : <a href="' . $link . '">' . $link . '</a>
-                <br/><br/>Regards';
+                <br/><br/>Saludos';
 
                     $enviado = mail($to, $subject, $mailContent);
                     die($enviado);

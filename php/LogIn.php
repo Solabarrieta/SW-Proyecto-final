@@ -87,7 +87,7 @@ if (isset($_POST['botonLogin'])) {
           </tr>
           <tr>
             <td></td>
-            <td align="left"><a href="RestablecerContraseña.php">¿Olvidaste la contraseña?</a></td>
+            <td align="left"><a href="RestablecerContrasena.php">¿Olvidaste la contraseña?</a></td>
           </tr>
           <tr>
             <td></td> <!-- NO VALIDA SIMPLEMENTE EJECUTA EL SCRIPT-->
