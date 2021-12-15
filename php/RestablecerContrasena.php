@@ -75,7 +75,7 @@ if (isset($_POST['restablecer'])) {
                     echo 'No hemos encontrado el correo introducido, por favor, vuelve a intentarlo';
                 } else {
                     $link = 'http://sw.ikasten.io/~osolabarrieta001/SW-Proyecto-final/php/NewPassword.php';
-                    $to = $_POST['correo'];
+                    $to = $_SESSION['correo-provisional'];
                     $subject = "Restablecimiento de contraseña Quiz SW";
                     $mailContent = 'Hola ' . $row['nom'] . ', 
                     <br/>Hemos recibido una petición para restablecer la contraseña de tu cuenta. 
