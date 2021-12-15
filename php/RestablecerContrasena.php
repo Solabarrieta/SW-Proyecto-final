@@ -76,7 +76,7 @@ if (isset($_POST['botonLogin'])) {
                 } else if ($error == 2) {
                     echo 'No hemos encontrado el correo introducido, por favor, vuelve a intentarlo';
                 } else {
-                    $link = 'http://localhost/~oier/proyecto-final/php/NewPassword.php';
+                    $link = 'http://sw.ikasten.io/~osolabarrieta001/SW-Proyecto-final/php/NewPassword.php';
                     $to = $_POST['correo'];
                     $subject = "Restablecimiento de contraseña Quiz SW";
                     $mailContent = 'Hola ' . $row['nom'] . ', 
