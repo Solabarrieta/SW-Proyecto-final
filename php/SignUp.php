@@ -21,6 +21,7 @@ if (isset($_POST['botonReg'])) {
 
   $tipoUser = $_POST['user'];
   $correo = $_POST['correo'];
+  $dominio = explode('@', $correo);
   $nom = $_POST['nom'];
   $apell = $_POST['apell'];
   $userpass = $_POST['userpass'];
@@ -39,9 +40,6 @@ if (isset($_POST['botonReg'])) {
     $error = 1;
   } else if ((preg_match($er2, $correo) || preg_match($er3, $correo)) && $tipoUser == 'alu') {
     $error = 1;
-  } else if (!(preg_match($er, $correo) || preg_match($er2, $correo) || preg_match($er3, $correo))) {
-    //El correo no es correcto
-    $error = 2;
   } else if (strlen($nom) < 2) {
     //El nombre tiene menos de dos carácteres
     $error = 3;
@@ -54,8 +52,16 @@ if (isset($_POST['botonReg'])) {
   } else if ($repass != $userpass) {
     //Contraseña y confirmar contraseña no coinciden
     $error = 6;
+  } else if ('gmail.com' != $dominio[1]) {
+    if (!(preg_match($er, $correo) || preg_match($er2, $correo) || preg_match($er3, $correo))) {
+      $error = 2;
+    } else {
+      $error = 0;
+      $correo_gmail = false;
+    }
   } else {
     $error = 0;
+    $correo_gmail = true;
   }
 }
 ?>
@@ -141,7 +147,7 @@ if (isset($_POST['botonReg'])) {
           echo '<h3>Si tu correo es de tipo <strong style="color: red">ESTUDIANTE</strong>, escoge tipo de usuario <strong style="color: red">ALUMNO</strong></h3>';
           echo '<h3>Si tu correo es de tipo <strong style="color: red">PROFESOR</strong>, escoge tipo de usuario <strong style="color: red">PROFESOR</strong></h3>';
         } else if ($error == 2) {
-          echo '<h3>Por favor, introduce un correo de la UPV/EHU</h3>';
+          echo '<h3>Si el correo no pertenece al dominio gmail.com, debes introducir un correo de la UPV/EHU</h3>';
         } else if ($error == 3) {
           echo '<h3>El nombre debe tener <strong style="color: red">DOS</strong> o más caracteres</h3>';
         } else if ($error == 4) {
@@ -163,7 +169,7 @@ if (isset($_POST['botonReg'])) {
               $dbh = new PDO($dsn, $user, $pass);
               /*Prepare */
 
-              $stmt = $dbh->prepare("INSERT INTO users (tipouser, correo, nom, apell, pass, img) VALUES (?,?,?,?,?,?)");
+              $stmt = $dbh->prepare("INSERT INTO users (tipouser, correoehu, correogmail, nom, apell, pass, img) VALUES (?,?,?,?,?,?,?)");
 
 
               /*BIND*/
@@ -175,23 +181,30 @@ if (isset($_POST['botonReg'])) {
               $hashpass = password_hash($userpass, PASSWORD_DEFAULT);
 
               $stmt->bindParam(1, $tipoUser);
-              $stmt->bindParam(2, $correo);
-              $stmt->bindParam(3, $nom);
-              $stmt->bindParam(4, $apell);
-              $stmt->bindParam(5, $hashpass);
-              $stmt->bindParam(6, $imagen_dir);
+              $myNull = null;
+              if ($correo_gmail) {
+                $stmt->bindParam(2, $myNull);
+                $stmt->bindParam(3, $correo);
+              } else {
+                $stmt->bindParam(2, $correo);
+                $stmt->bindParam(3, $myNull);
+              }
+              $stmt->bindParam(4, $nom);
+              $stmt->bindParam(5, $apell);
+              $stmt->bindParam(6, $hashpass);
+              $stmt->bindParam(7, $imagen_dir);
               $stmt->execute();
+              echo '<script type="text/javascript"> alert("Se ha realizado el registro de forma correcta");
+              window.location.href="LogIn.php";
+              </script>';
             } catch (PDOException $e) {
               echo $e->getMessage();
             }
           } else {
             echo 'El correo <span style="color: red;">' . $correo . '</span> NO esta matriculado en la asignatura Sistemas Web';
           }
-          echo '<script type="text/javascript"> alert("Se ha realizado el registro de forma correcta");
-          window.location.href="LogIn.php";
-          </script>';
         } else {
-          die("Estado 2");
+          die('Estado 1');
           echo '<script>alert("Ha ocurrido un error inesperado, por favor, intentelo de nuevo ")
                   window.location.href="SignUp.php"
         </script>';

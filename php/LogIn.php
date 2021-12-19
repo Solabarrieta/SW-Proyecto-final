@@ -25,9 +25,10 @@ if (isset($_POST['botonLogin'])) {
       echo $e->getMessage();
     }
 
-    $stmt = $dbh->prepare("SELECT * FROM users WHERE correo = ?");
+    $stmt = $dbh->prepare("SELECT * FROM users WHERE correoehu = ? OR correogmail = ?");
 
     $stmt->bindParam(1, $correo);
+    $stmt->bindParam(2, $correo);
 
     $stmt->execute();
     $row = $stmt->fetch();
