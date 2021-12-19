@@ -6,18 +6,20 @@ $error = -1;
 if (isset($_POST['restablecer'])) {
 
     $correo = $_POST['correo'];
+    $dominio = explode('@', $correo);
     if ($correo == "") {
         $error = 1;
+    } else if ('gmail.com' != $dominio[1]) {
+        $error = 2;
     } else {
         //Si no ha habido ningún error, se INTENTA logear al usuario
         //Conectamos con la base de datos mysql
         include 'DbConfig.php';
-        $_SESSION['correo-provisional'] = $_POST['correo'];
         try {
             $dsn = "mysql:host=$server;dbname=$basededatos";
             $dbh = new PDO($dsn, $user, $pass);
 
-            $stmt = $dbh->prepare("SELECT * FROM users WHERE correo = ?");
+            $stmt = $dbh->prepare("SELECT * FROM users WHERE correogmail = ?");
 
             $stmt->bindParam(1, $correo);
 
@@ -70,12 +72,14 @@ if (isset($_POST['restablecer'])) {
             <?php
             if (isset($_POST['restablecer'])) {
                 if ($error == 1) {
-                    echo 'Uupss parece que no has introducido el correo!';
+                    echo 'Uupss parece que no has introducido el correo';
                 } else if ($error == 2) {
-                    echo 'No hemos encontrado el correo introducido, por favor, vuelve a intentarlo';
+                    echo '<script src="../js/EnlazarCorreo.js"></script>';
+                    echo 'El correo debe ser del dominio gmail.com, si no tienes nigún correo de este dominio en lazado a tu cuenta, por favor, pulsa <a href="EnlazarCorreo.php">aquí</a>
+                    ';
                 } else {
                     $link = 'http://sw.ikasten.io/~osolabarrieta001/SW-Proyecto-final/php/NewPassword.php';
-                    $to = $_SESSION['correo-provisional'];
+                    $to = $row['correogmail'];
                     $subject = "Restablecimiento de contraseña Quiz SW";
                     $mailContent = 'Hola ' . $row['nom'] . ', 
                     <br/>Hemos recibido una petición para restablecer la contraseña de tu cuenta. 
